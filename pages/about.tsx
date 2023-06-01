@@ -1,12 +1,19 @@
-import About from '@/components/About'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import AboutComponent from '@/components/AboutComponent'
 import Container from '@/components/Container'
 
-const about = () => {
+export default function About() {
   return (
     <Container title="About">
-      <About />
+      <AboutComponent />
     </Container>
   )
 }
 
-export default about
+export const getStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['about'])),
+    },
+  }
+}

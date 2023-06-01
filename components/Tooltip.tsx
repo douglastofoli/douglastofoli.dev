@@ -1,14 +1,35 @@
+enum Position {
+  'right',
+  'left',
+  'top',
+  'bottom',
+}
+
 type Props = {
   childrenn: React.ReactNode
   text: string
+  position?: Position
 }
 
-const Tooltip = ({ children, text }: Props) => {
+const Tooltip = ({ children, text, position = 'top' }: Props) => {
+  let tooltipClasses =
+    'absolute bg-gray-800 dark:bg-gray-700 text-white dark:text-gray-200 text-base px-4 py-2 rounded pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300'
+
+  if (position === 'right') {
+    tooltipClasses += ' right-full top-1/2 transform -translate-y-1/2'
+  } else if (position === 'left') {
+    tooltipClasses += ' left-full top-1/2 transform -translate-y-1/2'
+  } else if (position === 'top') {
+    tooltipClasses += ' bottom-full left-1/2 transform -translate-x-1/2'
+  } else if (position === 'bottom') {
+    tooltipClasses += ' top-full left-1/2 transform -translate-x-1/2'
+  }
+
   return (
-    <div className="group relative flex">
+    <div className="group relative">
       {children}
-      <span className="absolute top-[-40px] -translate-x-1/2 left-1/2 scale-0 transition-all transform-gpu origin-bottom bg-gray-800 dark:bg-gray-700 text-white dark:text-gray-200 text-base px-4 py-2 rounded pointer-events-none group-hover:scale-100">
-        {text}
+      <span className={tooltipClasses}>
+        <span className="whitespace-nowrap">{text}</span>
       </span>
     </div>
   )

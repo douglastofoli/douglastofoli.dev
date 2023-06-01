@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 type Props = {
   title: string
   imageSrc: string
@@ -10,9 +12,11 @@ const ProjectCard = ({ title, imageSrc, url, number }: Props) => {
     <a href={url} className="w-full block shadow-2xl">
       <div className="relative overflow-hidden">
         <div className="h-72 object-cover">
-          <img
+          <Image
             src={imageSrc}
-            alt="portfolio"
+            alt={title}
+            height={125}
+            width={125}
             className="transform hover:scale-125 transition duration-2000 ease-out object-cover h-full w-full"
           />
         </div>

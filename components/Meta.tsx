@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import GoogleAnalytics from './GoogleAnalytics'
 import config from '@/config'
 
 type Props = {
@@ -14,6 +15,7 @@ const Meta = ({ title }: Props) => {
   return (
     <Head>
       <title>{title ? `${title} | ${meta.title}` : meta.title}</title>
+
       <link rel="shortcut icon" href={config.favicon.favicon} />
       <link
         rel="icon"
@@ -47,6 +49,8 @@ const Meta = ({ title }: Props) => {
       <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
       <meta name="description" content={meta.description} />
       <meta property="og:image" content={meta.ogImage} />
+
+      <GoogleAnalytics />
     </Head>
   )
 }

@@ -10,14 +10,14 @@ type Props = {
 
 const Container = ({ title, children }: Props) => {
   return (
-    <div>
+    <>
       <Meta title={title} />
       <main className="dark:bg-gray-800 w-full">
         <Navbar />
         {children}
         <Footer />
       </main>
-    </div>
+    </>
   )
 }
 

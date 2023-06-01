@@ -1,6 +1,6 @@
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Container from '@/components/Container'
 import Experiences from '@/components/Experiences'
-import config from '@/config'
 
 const experiences = () => {
   return (
@@ -9,5 +9,13 @@ const experiences = () => {
     </Container>
   )
 }
+
+// export const getStaticPaths = async ({ locale }) => {
+//   return {
+//     props: {
+//       ...(await serverSideTranslations(locale, ['experience'])),
+//     },
+//   }
+// }
 
 export default experiences

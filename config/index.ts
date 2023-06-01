@@ -9,6 +9,16 @@ export default {
   fullName: 'Douglas Tofoli',
   avatar: 'https://github.com/douglastofoli.png',
 
+  email: 'contact@douglastofoli.dev',
+
+  googleAnalytics: 'G-YKYX6DVRTX',
+
+  lookingForAJob: true,
+
+  blog: {
+    postsDirectory: '_posts',
+  },
+
   github: 'https://github.com/douglastofoli',
 
   favicon: {

@@ -1,9 +1,7 @@
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Container from '@/components/Container'
 import FavouriteProjects from '@/components/FavouriteProjects'
 import Hero from '@/components/Hero'
-import LatestArticles from '@/components/Hero'
-
-import styles from '@/styles/Home.module.css'
 
 const Home = () => {
   return (
@@ -13,6 +11,14 @@ const Home = () => {
       {/* <LatestArticles /> */}
     </Container>
   )
+}
+
+export const getStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'home'])),
+    },
+  }
 }
 
 export default Home
