@@ -1,20 +1,18 @@
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import GoogleAnalytics from './GoogleAnalytics'
 import config from '@/config'
+import Head from 'next/head'
+import { useTranslation } from 'react-i18next'
+import GoogleAnalytics from './GoogleAnalytics'
 
 type Props = {
   title: string
 }
 
 const Meta = ({ title }: Props) => {
-  const { locale } = useRouter()
-
-  const meta = config[locale].meta
+  const { t } = useTranslation()
 
   return (
     <Head>
-      <title>{title ? `${title} | ${meta.title}` : meta.title}</title>
+      <title>{title ? `${title} | ${t('site_name')}` : t('site_name')}</title>
 
       <link rel="shortcut icon" href={config.favicon.favicon} />
       <link
@@ -47,8 +45,8 @@ const Meta = ({ title }: Props) => {
       />
       <meta name="theme-color" content="#000" />
       <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
-      <meta name="description" content={meta.description} />
-      <meta property="og:image" content={meta.ogImage} />
+      <meta name="description" content={t('meta_description')} />
+      <meta property="og:image" content={config.meta.ogImage} />
 
       <GoogleAnalytics />
     </Head>

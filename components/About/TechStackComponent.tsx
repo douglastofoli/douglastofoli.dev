@@ -1,6 +1,6 @@
+import config from '@/config'
 import Image from 'next/image'
 import Tooltip from '../Tooltip'
-import config from '@/config'
 
 const TechStackComponent = () => {
   return (

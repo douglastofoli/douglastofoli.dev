@@ -24,7 +24,7 @@ const PostHero = ({
 }: Props) => {
   return (
     <section>
-      <div className="md:mb-16">
+      <div className="mb-10 md:mb-16">
         <CoverImage title={title} src={coverImage} slug={slug} />
       </div>
       <div className="md:grid md:grid-cols-2 md:gap-x-16 lg:gap-x-8 mb-20 md:mb-28">

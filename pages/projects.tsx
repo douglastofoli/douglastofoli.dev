@@ -10,12 +10,12 @@ const projects = () => {
   )
 }
 
-// export const getStaticPaths = async ({ locale }) => {
-//   return {
-//     props: {
-//       ...(await serverSideTranslations(locale, ['projects'])),
-//     },
-//   }
-// }
+export const getStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'projects'])),
+    },
+  }
+}
 
 export default projects

@@ -1,6 +1,6 @@
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import AboutComponent from '@/components/AboutComponent'
 import Container from '@/components/Container'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 export default function About() {
   return (
@@ -13,7 +13,7 @@ export default function About() {
 export const getStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['about'])),
+      ...(await serverSideTranslations(locale, ['about', 'common'])),
     },
   }
 }

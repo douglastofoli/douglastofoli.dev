@@ -10,12 +10,12 @@ const contact = () => {
   )
 }
 
-// export const getStaticPaths = async ({ locale }) => {
-//   return {
-//     props: {
-//       ...(await serverSideTranslations(locale, ['contact'])),
-//     },
-//   }
-// }
+export const getStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'contact'])),
+    },
+  }
+}
 
 export default contact

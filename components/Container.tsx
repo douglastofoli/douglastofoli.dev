@@ -1,7 +1,6 @@
 import Footer from './Footer'
 import Meta from './Meta'
 import Navbar from './Navbar'
-import config from '@/config'
 
 type Props = {
   title?: string

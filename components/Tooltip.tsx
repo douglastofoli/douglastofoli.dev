@@ -1,17 +1,12 @@
-enum Position {
-  'right',
-  'left',
-  'top',
-  'bottom',
-}
+type Position = 'right' | 'left' | 'top' | 'bottom'
 
 type Props = {
-  childrenn: React.ReactNode
-  text: string
+  children: React.ReactNode
+  tooltip: string
   position?: Position
 }
 
-const Tooltip = ({ children, text, position = 'top' }: Props) => {
+const Tooltip = ({ children, tooltip, position = 'top' }: Props) => {
   let tooltipClasses =
     'absolute bg-gray-800 dark:bg-gray-700 text-white dark:text-gray-200 text-base px-4 py-2 rounded pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300'
 
@@ -29,7 +24,7 @@ const Tooltip = ({ children, text, position = 'top' }: Props) => {
     <div className="group relative">
       {children}
       <span className={tooltipClasses}>
-        <span className="whitespace-nowrap">{text}</span>
+        <span className="whitespace-nowrap">{tooltip}</span>
       </span>
     </div>
   )

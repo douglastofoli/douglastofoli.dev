@@ -10,12 +10,12 @@ const experiences = () => {
   )
 }
 
-// export const getStaticPaths = async ({ locale }) => {
-//   return {
-//     props: {
-//       ...(await serverSideTranslations(locale, ['experience'])),
-//     },
-//   }
-// }
+export const getStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'experience'])),
+    },
+  }
+}
 
 export default experiences

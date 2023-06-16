@@ -1,16 +1,14 @@
-import { useRouter } from 'next/router'
+import config from '@/config'
+import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 import Icon from './Icon'
 import LocaleSwitcher from './LocaleSwitcher'
 import ThemeSwitcher from './ThemeSwitcher'
-import config from '@/config'
+import { useRouter } from 'next/router'
 
 const Navbar = () => {
-  const { asPath, locale, push, route } = useRouter()
-
-  const title = config[locale].title
-  const designation = config[locale].designation
-  const navbar = config[locale].navbar
+  const { t } = useTranslation('about')
+  const { asPath } = useRouter()
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10 md:py-200">
@@ -18,16 +16,16 @@ const Navbar = () => {
         <div className="flex flex-col">
           <Link href="/">
             <h1 className="font-semibold text-xl dark:text-gray-100">
-              {title}
+              {t('site_name')}
             </h1>
             <p className="text-base font-light text-gray-500 dark:text-gray-300">
-              {designation}
+              {t('designation')}
             </p>
           </Link>
         </div>
 
         <div className="space-x-8 hidden md:block">
-          {navbar.paths.map((item, index) => (
+          {config.navbar.map((item, index) => (
             <Link
               key={index}
               href={item.path}
@@ -55,7 +53,7 @@ const Navbar = () => {
               key={index}
               href={item.url}
               title={item.name}
-              targert={item.external && '_blank'}
+              target={item.external ? '_blank' : ''}
             >
               <Icon
                 name={item.name}
@@ -71,7 +69,7 @@ const Navbar = () => {
       </div>
 
       <div className="space-x-8 block md:hidden mt-4">
-        {navbar.paths.map((item, index) => (
+        {config.navbar.map((item, index) => (
           <Link
             key={index}
             href={item.path}

@@ -1,33 +1,34 @@
-import { IconContext } from 'react-icons'
-import { FaFacebook, FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa'
-import { BsArrow90DegUp, BsArrowUpRightSquare } from 'react-icons/bs'
-import { FiArrowDown } from 'react-icons/fi'
-import { SiElixir, SiJavascript } from 'react-icons/si'
-
-enum IconName {
-  'ArrowDown' = FiArrowDown,
-  'Arrow90DegUp' = BsArrow90DegUp,
-  'ArrowUpRightSquare' = BsArrowUpRightSquare,
-  'Facebook' = FaFacebook,
-  'GitHub' = FaGithub,
-  'LinkedIn' = FaLinkedin,
-  'Instagram' = FaInstagram,
-  'Elixir' = SiElixir,
-  'JavaScript' = SiJavascript,
-}
+import { IconContext, IconType } from 'react-icons'
+// import {
+//   BsArrow90DegUp,
+//   BsArrowUpRightSquare,
+//   BsFillMoonFill,
+//   BsFillSunFill,
+// } from 'react-icons/bs'
+// import {
+//   FaEnvelope,
+//   FaFacebook,
+//   FaGithub,
+//   FaInstagram,
+//   FaLinkedin,
+//   FaPhone,
+//   FaThumbtack,
+// } from 'react-icons/fa'
+// import { FiArrowDown } from 'react-icons/fi'
+// import { SiElixir, SiJavascript } from 'react-icons/si'
 
 type Props = {
-  name: IconName
+  icon: IconType
   size: number
   color?: string
   className?: string
 }
 
-const Icon = ({ name, size, color, className }: Props) => {
-  const IconComponent = IconName[name]
+const Icon = ({ icon: IconComponent, size, color, className }: Props) => {
+  const sizeString = `${size}px`
 
   return (
-    <IconContext.Provider value={{ size: size, color: color }}>
+    <IconContext.Provider value={{ size: sizeString, color: color }}>
       <IconComponent className={className} />
     </IconContext.Provider>
   )

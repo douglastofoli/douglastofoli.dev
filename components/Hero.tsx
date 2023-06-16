@@ -1,21 +1,19 @@
+import config from '@/config'
+import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
-import { useRouter } from 'next/router'
-import {  RoughNotationGroup } from 'react-rough-notation'
+import { RoughNotationGroup } from 'react-rough-notation'
 import Icon from './Icon'
 import RainbowHighlight from './RainbowHighlight'
-import config from '@/config'
 
 const Hero = () => {
-  const { locale } = useRouter()
-
-  const hero = config[locale].hero
+  const { t } = useTranslation('home')
 
   return (
     <div className="flex flex-row justify-center items-start overflow-hidden">
       {/* Text container */}
       <div className="w-full md:w-1/2 mx-auto text-center md:text-left lg:p-20">
         <RoughNotationGroup show={true}>
-          {hero.textHighlight.map((item, index) => (
+          {config.hero.words.map((item, index) => (
             <RainbowHighlight key={index} color={item.color}>
               <h1 className="text-4xl md:text-8xl font-bold text-gray-700 dark:text-gray-200 my-2">
                 {item.word}
@@ -37,7 +35,7 @@ const Hero = () => {
           <div className="flex flex-row justify-between mt-4">
             <div className="flex flex-row space-x-4">
               <Icon name="Arrow90DegUp" size={16} />
-              <p className="font-mono">That's me</p>
+              <p className="font-mono">{t('thats_me')}</p>
             </div>
           </div>
         </div>

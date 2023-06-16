@@ -1,7 +1,8 @@
+import config from '@/config'
+import socialLinks from '@/config/social_links'
 import { useTranslation } from 'next-i18next'
 import ContactComponent from './About/ContactComponent'
 import TechStackComponent from './About/TechStackComponent'
-import config from '@/config'
 
 const AboutComponent = () => {
   const { t } = useTranslation('about')
@@ -44,7 +45,7 @@ const AboutComponent = () => {
                     {t('jobOpportunities.description.0')}{' '}
                     <a
                       href={t('resume_url')}
-                      target="__blank"
+                      target="_blank"
                       className="text-gray-800 border-b-2 border-gray-800 dark:border-gray-300 font-bold dark:text-gray-300"
                     >
                       LinkedIn
@@ -61,13 +62,14 @@ const AboutComponent = () => {
               {t('social_links')}
             </h1>
             <div className="mt-4 ml-4">
-              {config.social.map((item, index) => (
+              {socialLinks.map((item, index) => (
                 <div
                   key={index}
                   className="flex flex-row justify-start items-center"
                 >
                   <a
                     href={item.url}
+                    target={item.external ? '_blank' : ''}
                     className="flex flex-row items-center space-x-4 group"
                   >
                     <div className="my-4">&rarr;</div>

@@ -1,10 +1,4 @@
-import br from './locales/br'
-import en from './locales/en'
-
 export default {
-  br,
-  en,
-
   baseUrl: 'https://douglastofoli.dev',
   fullName: 'Douglas Tofoli',
   avatar: 'https://github.com/douglastofoli.png',
@@ -19,7 +13,8 @@ export default {
     postsDirectory: '_posts',
   },
 
-  github: 'https://github.com/douglastofoli',
+  githubUrl: 'https://github.com/douglastofoli',
+  githubUsername: 'douglastofoli',
 
   favicon: {
     favicon: '/favicon/favicon.ico',
@@ -29,6 +24,54 @@ export default {
     safariPinnedTab: '/favicon/safari-pinned-tab.svg',
     manifest: '/favicon/site.webmanifest',
     browserConfig: '/favicon/browserconfig.xml',
+  },
+
+  meta: {
+    ogImage: '/images/og-image.png',
+  },
+
+  navbar: [
+    {
+      name: 'About',
+      path: '/about',
+    },
+    {
+      name: 'Projects',
+      path: '/projects',
+    },
+    {
+      name: 'Experiences',
+      path: '/experiences',
+    },
+    {
+      name: 'Blog',
+      path: '/blog',
+    },
+    // {
+    //   name: 'Contact',
+    //   path: '/contact',
+    // },
+  ],
+
+  hero: {
+    words: [
+      {
+        word: 'Developer.',
+        color: '#3b82f6',
+      },
+      {
+        word: 'Backend.',
+        color: '#f59e0b',
+      },
+      {
+        word: 'Frontend.',
+        color: '#10b981',
+      },
+      {
+        word: 'Database.',
+        color: '#84cc16',
+      },
+    ],
   },
 
   // titleRole: 'Software Developer',

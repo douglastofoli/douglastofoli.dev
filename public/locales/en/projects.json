@@ -1,0 +1,16 @@
+{
+  "title": "Projects",
+
+  "projects": [
+    {
+      "title": "Project 1",
+      "imageSrc": "",
+      "url": ""
+    },
+    {
+      "title": "Project 2",
+      "imageSrc": "",
+      "url": ""
+    }
+  ]
+}

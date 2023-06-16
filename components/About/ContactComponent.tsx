@@ -1,5 +1,5 @@
-import { useTranslation } from 'next-i18next'
 import config from '@/config'
+import { useTranslation } from 'next-i18next'
 
 const ContactComponent = () => {
   const { t } = useTranslation('about')

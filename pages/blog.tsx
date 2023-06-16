@@ -9,7 +9,7 @@ type Props = {
   posts: PostType[]
 }
 
-const blog = ({ posts }: Props) => {
+export default function Blog({ posts }: Props) {
   return (
     <Container title="Blog">
       <BlogComponent posts={posts} />
@@ -34,5 +34,3 @@ export const getStaticProps = async ({ locale }: { locale: string }) => {
     },
   }
 }
-
-export default blog
