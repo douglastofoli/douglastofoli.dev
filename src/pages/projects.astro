@@ -1,0 +1,274 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+
+const featuredProjects = [
+	{
+		name: 'GambiConf',
+		description: 'A multilingual, language-agnostic tech event centered on project essence.',
+		note: 'Conference website and community-facing product work for an event with localization, public content, and a lightweight contributor flow.',
+		stack: ['Svelte', 'SvelteKit', 'Localization', 'GitHub Pages'],
+		section: 'Community and Events',
+		repo: 'https://github.com/gambiconf/gambiconf.github.io',
+		live: 'https://gambiconf.dev/',
+	},
+	{
+		name: 'Pescarte',
+		description: 'A platform developed for a mitigation initiative under federal environmental licensing.',
+		note: 'Applied software work in a real-world institutional context, where domain modeling, reliability, and clarity matter more than novelty.',
+		stack: ['Platform Engineering', 'Data Workflows', 'Public Interest Software'],
+		section: 'Institutional Platforms',
+		repo: 'https://github.com/douglastofoli?tab=repositories&q=pescarte',
+    live: 'https://pescarte.org.br',
+	},
+	{
+		name: 'Storage-Ex',
+		description: 'A lightweight Elixir client for Supabase Storage.',
+		note: 'Library work focused on a small API surface: predictable calls, idiomatic Elixir usage, and easy integration with Supabase-backed applications.',
+		stack: ['Elixir', 'Supabase Storage', 'Client Library'],
+		section: 'Open Source Libraries',
+		repo: 'https://github.com/supabase-community/storage-ex',
+		live: '',
+	},
+];
+
+const sections = [...new Set(featuredProjects.map((project) => project.section))];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`Projects | ${SITE_TITLE}`}
+			description="Featured projects from Douglas Tofoli's GitHub profile."
+		/>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<header class="page-header">
+				<p class="eyebrow">Featured Projects</p>
+				<h1>Projects</h1>
+				<p>
+					A curated set from my GitHub profile: community work, institutional software, and
+					Elixir tooling.
+				</p>
+			</header>
+
+			<section class="notes" aria-label="Project notes">
+				<div>
+					<strong>Focus</strong>
+					<span>Functional programming, open source, developer tooling, and maintainable systems.</span>
+				</div>
+				<div>
+					<strong>Source</strong>
+					<span>Projects listed from the featured section on my GitHub profile.</span>
+				</div>
+			</section>
+
+			{
+				sections.map((section) => (
+					<section class="project-section" aria-labelledby={`${section.toLowerCase().replaceAll(' ', '-')}-title`}>
+						<h2 id={`${section.toLowerCase().replaceAll(' ', '-')}-title`}>{section}</h2>
+						<div class="project-list">
+							{featuredProjects
+								.filter((project) => project.section === section)
+								.map((project) => (
+									<article class="project-card">
+										<div class="project-card-header">
+											<div>
+												<h3>{project.name}</h3>
+												<p>{project.description}</p>
+											</div>
+											<div class="project-actions">
+												<a href={project.repo} target="_blank" rel="noreferrer">Repo</a>
+												{project.live && (
+													<a href={project.live} target="_blank" rel="noreferrer">Live</a>
+												)}
+											</div>
+										</div>
+
+										<p class="project-note">{project.note}</p>
+
+										<ul class="stack-list" aria-label={`${project.name} stack`}>
+											{project.stack.map((item) => (
+												<li>{item}</li>
+											))}
+										</ul>
+									</article>
+								))}
+						</div>
+					</section>
+				))
+			}
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+  main {
+    max-width: 720px;
+		margin: 0 auto;
+		padding: 2rem 1.25rem 4rem;
+  }
+
+	.page-header {
+		margin-bottom: 1.5rem;
+	}
+
+	.eyebrow {
+		color: var(--accent);
+		font-size: 0.8rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		margin-bottom: 0.35rem;
+		text-transform: uppercase;
+	}
+
+	.page-header p:last-child {
+		color: var(--text-muted);
+		margin: 0;
+	}
+
+	.notes {
+		display: grid;
+		gap: 0.75rem;
+		border-top: 1px solid var(--border-color);
+		border-bottom: 1px solid var(--border-color);
+		margin-bottom: 2rem;
+		padding: 1rem 0;
+	}
+
+	.notes div {
+		display: grid;
+		grid-template-columns: 6rem 1fr;
+		gap: 1rem;
+	}
+
+	.notes strong {
+		color: var(--text-primary);
+		font-size: 0.9rem;
+	}
+
+	.notes span {
+		color: var(--text-muted);
+	}
+
+	.project-section + .project-section {
+		margin-top: 2rem;
+	}
+
+	.project-section > h2 {
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+		color: var(--accent);
+		font-size: 1.05rem;
+		margin-bottom: 0.8rem;
+	}
+
+	.project-section > h2::before {
+		content: "";
+		width: 3px;
+		height: 1.1rem;
+		border-radius: 999px;
+		background: var(--accent);
+	}
+
+	.project-list {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.project-card {
+		border: 1px solid var(--border-color);
+		border-radius: 8px;
+		background: var(--bg-secondary);
+		padding: 1.1rem 1.2rem;
+	}
+
+	.project-card-header {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.project-card h3 {
+		font-size: 1.15rem;
+		margin: 0 0 0.3rem;
+	}
+
+	.project-card p {
+		color: var(--text-muted);
+		margin: 0;
+	}
+
+	.project-actions {
+		display: flex;
+		flex: 0 0 auto;
+		gap: 0.5rem;
+	}
+
+	.project-actions a {
+		border: 1px solid var(--border-color);
+		border-radius: 6px;
+		color: var(--text-secondary);
+		font-size: 0.82rem;
+		font-weight: 700;
+		padding: 0.35rem 0.55rem;
+	}
+
+	.project-actions a:hover {
+		border-color: color-mix(in srgb, var(--accent) 45%, var(--border-color));
+		background: color-mix(in srgb, var(--accent) 8%, transparent);
+		color: var(--accent);
+	}
+
+	.project-note {
+		border-left: 3px solid var(--accent);
+		margin-top: 1rem !important;
+		padding-left: 0.85rem;
+	}
+
+	.stack-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.45rem;
+		list-style: none;
+		margin: 1rem 0 0;
+		padding: 0;
+	}
+
+	.stack-list li {
+		border: 1px solid var(--border-color);
+		border-radius: 999px;
+		background: var(--bg-primary);
+		color: var(--text-muted);
+		font-size: 0.78rem;
+		font-weight: 700;
+		padding: 0.18rem 0.55rem;
+	}
+
+	@media (max-width: 640px) {
+		.notes div,
+		.project-card-header {
+			grid-template-columns: 1fr;
+		}
+
+		.notes div {
+			gap: 0.15rem;
+		}
+
+		.project-card-header {
+			display: grid;
+		}
+
+		.project-actions {
+			flex-wrap: wrap;
+		}
+	}
+</style>
