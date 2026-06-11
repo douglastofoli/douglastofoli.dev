@@ -33,6 +33,12 @@ const posts = (await getCollection('blog'))
 					<path d="m21 21-4.35-4.35"></path>
 				</svg>
 				<input class="search-input" type="search" placeholder="Search posts..." autocomplete="off" spellcheck="false" />
+				<button class="search-close" type="button" data-close-search aria-label="Close search">
+					<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+						<path d="M18 6 6 18"></path>
+						<path d="m6 6 12 12"></path>
+					</svg>
+				</button>
 			</form>
 			<div class="search-state" data-state>Type to search the blog archive.</div>
 			<ul class="search-results" data-results></ul>
@@ -54,12 +60,13 @@ const posts = (await getCollection('blog'))
 			connectedCallback() {
 				const openButton = this.querySelector('[data-open-search]');
 				const dialog = this.querySelector('dialog');
+				const closeButton = this.querySelector('[data-close-search]');
 				const form = this.querySelector('.search-form');
 				const input = this.querySelector('.search-input');
 				const state = this.querySelector('[data-state]');
 				const results = this.querySelector('[data-results]');
 
-				if (!openButton || !dialog || !form || !input || !state || !results) return;
+				if (!openButton || !dialog || !closeButton || !form || !input || !state || !results) return;
 
 				const escapeHtml = (value) =>
 					value.replace(/[&<>"']/g, (char) => ({
@@ -124,6 +131,7 @@ const posts = (await getCollection('blog'))
 				};
 
 				openButton.addEventListener('click', open);
+				closeButton.addEventListener('click', close);
 				form.addEventListener('submit', (event) => event.preventDefault());
 				input.addEventListener('input', () => render(input.value));
 				dialog.addEventListener('click', (event) => {
@@ -217,6 +225,7 @@ const posts = (await getCollection('blog'))
 
 	.search-panel {
 		display: flex;
+		min-height: 0;
 		max-height: 78vh;
 		flex-direction: column;
 	}
@@ -233,6 +242,26 @@ const posts = (await getCollection('blog'))
 	.search-form svg {
 		color: var(--text-muted);
 		flex: 0 0 auto;
+	}
+
+	.search-close {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex: 0 0 auto;
+		width: 34px;
+		height: 34px;
+		border: 0;
+		border-radius: 6px;
+		background: transparent;
+		color: var(--text-muted);
+		cursor: pointer;
+		padding: 0;
+	}
+
+	.search-close:hover {
+		background: var(--bg-tertiary);
+		color: var(--text-primary);
 	}
 
 	.search-input {
@@ -259,6 +288,7 @@ const posts = (await getCollection('blog'))
 		list-style: none;
 		margin: 0;
 		max-height: 24rem;
+		min-height: 0;
 		overflow-y: auto;
 		padding: 0.75rem;
 	}
@@ -302,6 +332,16 @@ const posts = (await getCollection('blog'))
 	}
 
 	@media (max-width: 640px) {
+		site-search {
+			flex: 0 0 auto;
+		}
+
+		.search-trigger {
+			justify-content: center;
+			width: 36px;
+			padding: 0;
+		}
+
 		.search-trigger span:not([data-platform-key]) {
 			display: none;
 		}
@@ -310,8 +350,53 @@ const posts = (await getCollection('blog'))
 			display: none;
 		}
 
+		dialog {
+			width: 100vw;
+			max-width: none;
+			height: 100vh;
+			height: 100dvh;
+			max-height: 100vh;
+			max-height: 100dvh;
+			margin: 0;
+			border: 0;
+			border-radius: 0;
+		}
+
+		.search-panel {
+			height: 100vh;
+			height: 100dvh;
+			max-height: 100vh;
+			max-height: 100dvh;
+			padding-top: env(safe-area-inset-top);
+			padding-bottom: env(safe-area-inset-bottom);
+		}
+
+		.search-form {
+			padding: 0.85rem 1rem;
+		}
+
+		.search-input {
+			font-size: 1rem;
+		}
+
+		.search-state {
+			padding: 0.7rem 1rem;
+		}
+
+		.search-results {
+			flex: 1;
+			max-height: none;
+			padding: 0.65rem;
+		}
+
 		.search-results a {
 			grid-template-columns: 1fr;
+			gap: 0.25rem;
+			padding: 0.8rem 0.85rem;
+		}
+
+		.result-date {
+			white-space: normal;
 		}
 	}
 </style>
