@@ -1,0 +1,51 @@
+---
+title: 'Incremental Responsiveness: Improving an Astro Blog for Mobile'
+description: 'How small, focused responsive changes can make a personal blog feel better on mobile.'
+pubDate: 'Jun 11 2026'
+tags: ['astro', 'css', 'responsive-design']
+---
+
+Making a website responsive does not always require a complete redesign. Sometimes the best path is to improve one part at a time, especially on a personal blog where the structure is already simple and the main goal is readability.
+
+Recently I worked through this blog component by component. Instead of changing the whole layout at once, I looked for the places where the mobile experience felt tight, awkward, or harder to use.
+
+## Start with the problem
+
+The desktop version worked well, but a few areas needed more care on smaller screens. Some actions were too small to tap comfortably. Some sections kept desktop spacing on mobile. A few layouts still assumed there was enough horizontal space.
+
+That is usually where responsive work should begin: not with a new design system, but with the real friction in the interface.
+
+## Improve one component at a time
+
+The search component was a good first target. On desktop, a centered modal works well. On mobile, the same modal can feel cramped, especially when the keyboard is open.
+
+The better mobile behavior was to make search feel like a full-screen sheet. That gave the input and results more room, kept scrolling predictable, and made the close action explicit.
+
+After that, the home page needed smaller typography, tighter spacing, and post rows that stacked cleanly. A date and title can sit side by side on desktop, but on mobile they are easier to scan when the date sits above the title.
+
+## Make cards and actions easier to use
+
+The projects page had a different problem. The content was readable, but the card headers and action links needed more room.
+
+On mobile, project actions like `Repo` and `Live` should behave like real touch targets. Increasing their height and letting them stack on very small screens made the page feel less compressed.
+
+The same idea applied to the footer. Social links that look fine as simple inline text on desktop can become small targets on mobile. Turning them into compact bordered links gives them better spacing without making the footer feel heavy.
+
+## Keep the changes local
+
+One useful constraint was to keep each change close to the component or page that needed it. The search modal, home page, projects page, about page, and footer each received their own focused responsive rules.
+
+That made the work easier to reason about. Each breakpoint answered a specific question:
+
+- Does this layout still fit?
+- Is this text still comfortable to read?
+- Are the actions easy to tap?
+- Does the content still have enough breathing room?
+
+## The lesson
+
+Responsive design is often incremental. A blog does not need a large rewrite to become better on mobile.
+
+Small improvements compound quickly: better modal sizing, stacked rows, adjusted spacing, larger tap targets, and cleaner footer links. Each change is simple, but together they make the site feel more intentional across screen sizes.
+
+That is the kind of responsive work I like most: practical, local, and guided by the actual reading experience.

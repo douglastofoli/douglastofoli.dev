@@ -140,9 +140,8 @@ const formatDate = (date: Date) => {
 				margin: 0;
 				color: var(--text-primary);
 				flex: 1;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
+				min-width: 0;
+				overflow-wrap: anywhere;
 			}
 			.post-tags {
 				display: flex;
@@ -159,8 +158,8 @@ const formatDate = (date: Date) => {
 			}
 			@media (max-width: 720px) {
 				main {
-		 	    max-width: 100%;
-			    padding-inline: 1rem;
+					max-width: 100%;
+					padding-inline: 1rem;
 				}
 				.notes div {
 					grid-template-columns: 1fr;
@@ -173,11 +172,6 @@ const formatDate = (date: Date) => {
 				}
 				.post-date {
 					min-width: auto;
-				}
-				.post-title {
-					white-space: normal;
-					overflow: visible;
-					text-overflow: unset;
 				}
 			}
 			html.dark .year-title {
