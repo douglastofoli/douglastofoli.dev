@@ -19,16 +19,18 @@ import SearchModal from './SearchModal.astro';
 
 <header>
 	<nav>
-		<a class="brand" href="/">{SITE_TITLE}</a>
-		<div class="nav-links">
+		<div class="nav-left">
+			<h2><a href="/">{SITE_TITLE}</a></h2>
+		</div>
+		<div class="nav-center">
 			<HeaderLink href="/">Home</HeaderLink>
 			<HeaderLink href="/blog">Blog</HeaderLink>
 			<HeaderLink href="/projects">Projects</HeaderLink>
 			<HeaderLink href="/about">About</HeaderLink>
 		</div>
-		<div class="nav-actions">
+		<div class="nav-right">
 			<SearchModal />
-			<button id="theme-toggle" class="icon-button" type="button" aria-label="Theme" title="Theme">
+			<button id="theme-toggle" class="nav-btn" type="button" aria-label="Theme" title="Theme">
 				<svg id="theme-icon" aria-hidden="true" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 					<circle cx="12" cy="12" r="5"></circle>
 					<path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
@@ -110,9 +112,14 @@ import SearchModal from './SearchModal.astro';
 		position: sticky;
 		top: 0;
 		z-index: 100;
+		width: 100%;
 		border-bottom: 1px solid var(--border-color);
-		background: color-mix(in srgb, var(--bg-primary) 92%, transparent);
-		backdrop-filter: blur(10px);
+		background-color: rgba(255, 255, 255, 0.95);
+		backdrop-filter: blur(8px);
+	}
+
+	html.dark header {
+		background-color: rgba(24, 24, 27, 0.95);
 	}
 
 	nav {
@@ -120,50 +127,66 @@ import SearchModal from './SearchModal.astro';
 		align-items: center;
 		justify-content: space-between;
 		gap: 1rem;
-		width: min(100% - 2rem, 1080px);
+		max-width: 1200px;
 		height: 64px;
 		margin: 0 auto;
+		padding: 0 1rem;
 	}
 
-	.brand {
+	.nav-left {
 		flex: 0 0 auto;
-		color: var(--text-primary);
-		font-size: 1rem;
+	}
+
+	h2 {
+		margin: 0;
+		font-size: 1.125rem;
 		font-weight: 700;
 	}
 
-	.nav-links {
+	h2 a,
+	h2 a.active {
+		color: var(--text-primary);
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	.nav-center {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 1.5rem;
+		gap: 2rem;
 	}
 
-	.nav-links a {
-		color: var(--text-secondary);
-		font-size: 0.9rem;
-		font-weight: 600;
-		line-height: 64px;
+	.nav-center a {
 		border-bottom: 2px solid transparent;
+		color: var(--text-secondary);
+		font-size: 0.875rem;
+		font-weight: 500;
+		padding: 0.5rem 0;
+		text-decoration: none;
+		transition:
+			border-color 0.2s ease,
+			color 0.2s ease;
 	}
 
-	.nav-links a:hover,
-	.nav-links a.active {
+	.nav-center a:hover,
+	.nav-center a.active {
 		color: var(--accent);
 	}
 
-	.nav-links a.active {
+	.nav-center a.active {
 		border-bottom-color: var(--accent);
+		font-weight: 700;
 	}
 
-	.nav-actions {
+	.nav-right {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
 		position: relative;
 	}
 
-	.icon-button,
+	.nav-btn,
 	.theme-menu button {
 		display: inline-flex;
 		align-items: center;
@@ -171,36 +194,40 @@ import SearchModal from './SearchModal.astro';
 		width: 36px;
 		height: 36px;
 		border: 0;
-		border-radius: 6px;
+		border-radius: 0.5rem;
 		background: transparent;
-		color: var(--text-secondary);
+		color: var(--text-muted);
 		cursor: pointer;
 		padding: 0;
+		transition:
+			background-color 0.2s ease,
+			color 0.2s ease;
 	}
 
-	.icon-button:hover,
+	.nav-btn:hover,
 	.theme-menu button:hover {
 		background: var(--bg-secondary);
-		color: var(--text-primary);
+		color: var(--accent);
 	}
 
 	.theme-menu {
 		position: absolute;
-		top: calc(100% + 0.5rem);
+		top: calc(100% + 8px);
 		right: 0;
 		display: grid;
 		gap: 0.2rem;
 		border: 1px solid var(--border-color);
-		border-radius: 8px;
+		border-radius: 0.75rem;
 		background: var(--bg-primary);
-		box-shadow: 0 16px 40px rgba(var(--shadow-color), 0.18);
+		box-shadow: 0 4px 20px rgba(var(--shadow-color), 0.15);
 		padding: 0.25rem;
 		opacity: 0;
 		pointer-events: none;
-		transform: translateY(-4px);
+		transform: translateY(-8px);
 		transition:
-			opacity 0.15s ease,
-			transform 0.15s ease;
+			opacity 0.2s ease,
+			transform 0.2s ease;
+		z-index: 200;
 	}
 
 	.theme-menu.show {
@@ -213,10 +240,10 @@ import SearchModal from './SearchModal.astro';
 		nav {
 			height: auto;
 			flex-wrap: wrap;
-			padding: 0.75rem 0;
+			padding: 0.75rem 1rem;
 		}
 
-		.nav-links {
+		.nav-center {
 			order: 3;
 			width: 100%;
 			justify-content: flex-start;
@@ -224,7 +251,7 @@ import SearchModal from './SearchModal.astro';
 			overflow-x: auto;
 		}
 
-		.nav-links a {
+		.nav-center a {
 			line-height: 2.2;
 			white-space: nowrap;
 		}
