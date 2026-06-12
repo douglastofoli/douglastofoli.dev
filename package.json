@@ -16,6 +16,11 @@
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.3",
     "astro": "^6.4.5",
-    "sharp": "^0.34.3"
+    "astro-expressive-code": "^0.43.1",
+    "expressive-code": "^0.43.1",
+    "rehype-components": "^0.3.0",
+    "rehype-expressive-code": "^0.43.1",
+    "sharp": "^0.34.3",
+    "unist-util-visit": "^5.1.0"
   }
 }

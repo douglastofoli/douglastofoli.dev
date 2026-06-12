@@ -1,14 +1,20 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import type { MarkdownHeading } from 'astro';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+interface Props extends CollectionEntry<'blog'>['data'] {
+	headings?: MarkdownHeading[];
+}
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, headings = [], tags = [] } = Astro.props;
+const tocHeadings = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 4);
+
+const formatDate = (date: Date) =>
+	date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 ---
 
 <!doctype html>
@@ -18,82 +24,440 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 	</head>
 	<body>
 		<Header />
-		<main>
-			<article>
-				<header class="article-header">
-					<p class="meta">
-						<FormattedDate date={pubDate} />
-						{
-							updatedDate && (
-								<>
-									<span aria-hidden="true">/</span>
-									<span>Updated <FormattedDate date={updatedDate} /></span>
-								</>
-							)
-						}
-					</p>
-					<h1>{title}</h1>
-					<p class="description">{description}</p>
-				</header>
+		<div class="page-container">
+			<main>
+				<article>
+					<header class="article-header">
+						<h1 class="article-title">{title}</h1>
+						{description && <p class="article-description">{description}</p>}
 
-				{
-					heroImage && (
-						<div class="hero-image">
-							<Image width={1120} height={560} src={heroImage} alt="" />
+						<div class="article-meta">
+							<span class="meta-item">
+								<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+									<rect x="3" y="4" width="18" height="18" rx="2"></rect>
+									<path d="M16 2v4M8 2v4M3 10h18"></path>
+								</svg>
+								{formatDate(pubDate)}
+							</span>
+							{
+								updatedDate && (
+									<>
+										<span class="meta-dot" aria-hidden="true"></span>
+										<span class="updated-badge">
+											<svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+												<path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path>
+											</svg>
+											Updated {formatDate(updatedDate)}
+										</span>
+									</>
+								)
+							}
+							{
+								tags.length > 0 && (
+									<>
+										<span class="meta-dot" aria-hidden="true"></span>
+										<div class="article-tags">
+											{tags.map((tag) => (
+												<span class="tag">{tag}</span>
+											))}
+										</div>
+									</>
+								)
+							}
 						</div>
-					)
-				}
+					</header>
 
-				<div class="prose">
-					<slot />
-				</div>
-			</article>
-		</main>
+					{
+						heroImage && (
+							<div class="hero-image">
+								<Image width={1120} height={560} src={heroImage} alt="" />
+							</div>
+						)
+					}
+
+					<div class="prose">
+						<slot />
+					</div>
+				</article>
+			</main>
+
+			{
+				tocHeadings.length > 0 && (
+					<aside class="sidebar" aria-label="On this page">
+						<div class="toc">
+							<div class="toc-title">On This Page</div>
+							<nav id="toc-nav">
+								{tocHeadings.map((heading) => (
+									<a href={`#${heading.slug}`} data-toc-link data-depth={heading.depth}>
+										{heading.text}
+									</a>
+								))}
+							</nav>
+						</div>
+						<button id="back-to-top" type="button" aria-label="Back to top" title="Back to top">
+							<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+								<path d="m18 15-6-6-6 6"></path>
+							</svg>
+							<span>Back to top</span>
+						</button>
+					</aside>
+				)
+			}
+		</div>
 		<Footer />
+
+		<script>
+			document.addEventListener('DOMContentLoaded', () => {
+				const backToTop = document.getElementById('back-to-top');
+				const tocContainer = document.querySelector<HTMLElement>('.toc');
+				const tocLinks = Array.from(document.querySelectorAll<HTMLElement>('[data-toc-link]'));
+				const articleHeadings = tocLinks
+					.map((link) => document.getElementById(link.getAttribute('href')?.slice(1) || ''))
+					.filter((heading): heading is HTMLElement => Boolean(heading));
+				let isScrolling = false;
+
+				const setActiveLink = (index: number) => {
+					tocLinks.forEach((link, currentIndex) => {
+						link.classList.toggle('active', currentIndex === index);
+					});
+
+					const activeLink = tocLinks[index];
+					if (!tocContainer || !activeLink || isScrolling) return;
+
+					const linkTop = activeLink.offsetTop;
+					const linkBottom = linkTop + activeLink.offsetHeight;
+					if (linkTop < tocContainer.scrollTop) {
+						tocContainer.scrollTop = linkTop - 10;
+					} else if (linkBottom > tocContainer.scrollTop + tocContainer.clientHeight) {
+						tocContainer.scrollTop = linkBottom - tocContainer.clientHeight + 10;
+					}
+				};
+
+				const updateToc = () => {
+					backToTop?.classList.toggle('show', window.scrollY > 100);
+					if (isScrolling || articleHeadings.length === 0) return;
+
+					const headerHeight = document.querySelector('header')?.clientHeight || 80;
+					const targetPosition = headerHeight + 120;
+					let currentIndex = 0;
+
+					articleHeadings.forEach((heading, index) => {
+						if (heading.getBoundingClientRect().top <= targetPosition) {
+							currentIndex = index;
+						}
+					});
+
+					setActiveLink(currentIndex);
+				};
+
+				tocLinks.forEach((link, index) => {
+					link.addEventListener('click', (event) => {
+						event.preventDefault();
+						const target = document.getElementById(link.getAttribute('href')?.slice(1) || '');
+						if (!target) return;
+
+						const headerHeight = document.querySelector('header')?.clientHeight || 80;
+						const top = target.getBoundingClientRect().top + window.scrollY - headerHeight - 20;
+						isScrolling = true;
+						setActiveLink(index);
+						window.scrollTo({ top, behavior: 'smooth' });
+						window.setTimeout(() => {
+							isScrolling = false;
+							setActiveLink(index);
+						}, 700);
+					});
+				});
+
+				backToTop?.addEventListener('click', () => {
+					window.scrollTo({ top: 0, behavior: 'smooth' });
+				});
+
+				window.addEventListener('scroll', updateToc, { passive: true });
+				updateToc();
+			});
+		</script>
 	</body>
 </html>
 
 <style>
-	.article-header {
-		border-bottom: 1px solid var(--border-color);
-		margin-bottom: 2rem;
-		padding-bottom: 1.75rem;
+	.page-container {
+		max-width: 700px;
+		margin: 0 auto;
+		padding: 3rem 1.25rem 5rem;
+		position: relative;
 	}
 
-	.meta {
+	.page-container main {
+		width: auto;
+		max-width: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.article-header {
+		border-bottom: 1px solid var(--border-color);
+		margin-bottom: 3rem;
+		padding-bottom: 2.25rem;
+	}
+
+	.article-title {
+		color: var(--text-primary);
+		font-size: 2.375rem;
+		font-weight: 700;
+		letter-spacing: 0;
+		line-height: 1.25;
+		margin: 0 0 1rem;
+	}
+
+	.article-description {
+		color: var(--text-muted);
+		font-size: 1.0625rem;
+		line-height: 1.75;
+		margin: 0 0 1.5rem;
+	}
+
+	.article-meta {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 0.8rem;
+		color: var(--text-faint);
+		font-size: 0.8125rem;
+	}
+
+	.meta-item,
+	.updated-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.375rem;
+	}
+
+	.meta-item svg,
+	.updated-badge svg {
+		flex: 0 0 auto;
+		opacity: 0.65;
+	}
+
+	.meta-dot {
+		width: 3px;
+		height: 3px;
+		border-radius: 50%;
+		background: var(--border-color);
+	}
+
+	.updated-badge {
+		border-radius: 4px;
+		background: var(--bg-tertiary);
+		color: var(--text-muted);
+		font-size: 0.75rem;
+		padding: 0.15rem 0.5rem;
+	}
+
+	.article-tags {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.5rem;
-		color: var(--text-muted);
-		font-size: 0.85rem;
-		margin-bottom: 0.75rem;
 	}
 
-	h1 {
-		font-size: 2.3rem;
-		letter-spacing: -0.02em;
-		margin-bottom: 0.85rem;
-	}
-
-	.description {
-		color: var(--text-muted);
-		font-size: 1.05rem;
-		line-height: 1.65;
-		margin: 0;
+	.tag {
+		display: inline-flex;
+		align-items: center;
+		border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--accent) 10%, transparent);
+		color: var(--accent);
+		font-size: 0.75rem;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+		line-height: 1.4;
+		padding: 0.2rem 0.65rem;
 	}
 
 	.hero-image {
-		margin: 0 0 2rem;
+		margin: -1rem 0 2.5rem;
 	}
 
 	.hero-image img {
 		border: 1px solid var(--border-color);
+		border-radius: 8px;
 		box-shadow: 0 16px 44px rgba(var(--shadow-color), 0.1);
 	}
 
+	:global(.prose) {
+		font-size: 0.98rem;
+		line-height: 1.75;
+	}
+
+	:global(.prose h2),
+	:global(.prose h3),
+	:global(.prose h4) {
+		letter-spacing: 0;
+		scroll-margin-top: 5.5rem;
+	}
+
+	:global(.prose h2) {
+		font-size: 1.375rem;
+		margin-top: 2rem;
+	}
+
+	:global(.prose h3) {
+		font-size: 1.125rem;
+		margin-top: 1.75rem;
+	}
+
+	.sidebar {
+		position: fixed;
+		top: 6.5rem;
+		bottom: 10rem;
+		left: calc(50% + 370px);
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		width: 220px;
+	}
+
+	.toc {
+		flex: 1;
+		min-height: 0;
+		overflow-y: auto;
+		border: 1px solid var(--border-color);
+		border-radius: 12px;
+		background: var(--bg-secondary);
+		padding: 1.125rem;
+	}
+
+	.toc-title {
+		color: var(--text-faint);
+		font-size: 0.6875rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		margin-bottom: 0.875rem;
+		text-transform: uppercase;
+	}
+
+	#toc-nav {
+		display: flex;
+		flex-direction: column;
+	}
+
+	[data-toc-link] {
+		display: block;
+		border-radius: 5px;
+		color: var(--text-muted);
+		font-size: 0.8125rem;
+		line-height: 1.5;
+		padding: 0.3rem 0.5rem;
+		text-decoration: none;
+		transition:
+			background-color 0.15s ease,
+			color 0.15s ease;
+	}
+
+	[data-toc-link]:hover {
+		background: var(--bg-tertiary);
+		color: var(--text-primary);
+	}
+
+	[data-toc-link][data-depth="2"] {
+		color: var(--text-secondary);
+		font-weight: 600;
+	}
+
+	[data-toc-link][data-depth="3"] {
+		font-size: 0.78125rem;
+		padding-left: 1rem;
+	}
+
+	[data-toc-link][data-depth="4"] {
+		color: var(--text-faint);
+		font-size: 0.75rem;
+		padding-left: 1.75rem;
+	}
+
+	[data-toc-link].active {
+		background: color-mix(in srgb, var(--accent) 8%, transparent);
+		color: var(--accent);
+		font-weight: 600;
+	}
+
+	#back-to-top {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.4rem;
+		width: 100%;
+		height: 40px;
+		border: 1px solid var(--border-color);
+		border-radius: 8px;
+		background: var(--bg-secondary);
+		color: var(--text-muted);
+		cursor: pointer;
+		font: inherit;
+		font-size: 0.8125rem;
+		font-weight: 500;
+		opacity: 0;
+		padding: 0;
+		transform: translateY(6px);
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease,
+			color 0.2s ease,
+			opacity 0.2s ease,
+			transform 0.2s ease,
+			visibility 0.2s ease;
+		visibility: hidden;
+	}
+
+	#back-to-top.show {
+		opacity: 1;
+		transform: translateY(0);
+		visibility: visible;
+	}
+
+	#back-to-top:hover {
+		border-color: var(--accent);
+		background: var(--accent);
+		color: var(--bg-primary);
+	}
+
+	@media (max-width: 1200px) {
+		.sidebar {
+			display: none;
+		}
+	}
+
 	@media (max-width: 720px) {
-		h1 {
-			font-size: 1.85rem;
+		.page-container {
+			padding: 2rem 1rem 4rem;
+		}
+
+		.article-header {
+			margin-bottom: 2rem;
+			padding-bottom: 1.5rem;
+		}
+
+		.article-title {
+			font-size: 1.75rem;
+		}
+
+		.article-description {
+			font-size: 1rem;
+		}
+
+		.article-meta {
+			gap: 0.6rem;
+		}
+
+		.meta-dot {
+			display: none;
+		}
+
+		.hero-image {
+			margin: -0.5rem 0 2rem;
+		}
+
+		:global(.prose) {
+			font-size: 0.96rem;
 		}
 	}
 </style>
