@@ -16,7 +16,7 @@ import { AUTHOR_DESCRIPTION, AUTHOR_NAME, AUTHOR_TITLE, SITE_TITLE } from '../co
 			<article class="prose">
 				<header class="page-header">
 					<p class="eyebrow">About</p>
-					<h1>{AUTHOR_NAME}</h1>
+					<h1 class="page-title">{AUTHOR_NAME}</h1>
 					<p class="lead">{AUTHOR_TITLE}</p>
 				</header>
 
@@ -50,9 +50,9 @@ import { AUTHOR_DESCRIPTION, AUTHOR_NAME, AUTHOR_TITLE, SITE_TITLE } from '../co
 
 <style>
   main {
-    max-width: 720px;
-		margin: 0 auto;
-		padding: 2rem 1.25rem 4rem;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
   }
 
 	.page-header {
@@ -60,6 +60,24 @@ import { AUTHOR_DESCRIPTION, AUTHOR_NAME, AUTHOR_TITLE, SITE_TITLE } from '../co
 		margin-bottom: 2rem;
 		padding-bottom: 1.5rem;
 	}
+
+  .page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0 0 2rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .page-title::before {
+    content: '';
+    width: 4px;
+    height: 1.75rem;
+    background: linear-gradient(180deg, var(--accent), #8b5cf6);
+    border-radius: 2px;
+  }
 
 	.eyebrow {
 		color: var(--accent);

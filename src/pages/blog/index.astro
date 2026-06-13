@@ -32,14 +32,34 @@ const formatDate = (date: Date) => {
 	<head>
 		<BaseHead title={`Blog | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 		<style>
-			main {
-				max-width: 720px;
-				margin: 0 auto;
-				padding: 2rem 1.25rem 4rem;
-			}
+      main {
+        max-width: 640px;
+        margin: 0 auto;
+        padding: 2rem 1.25rem 4rem;
+      }
+
 			.page-header {
 				margin-bottom: 1.5rem;
-			}
+      }
+
+      .page-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin: 0 0 2rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-primary);
+      }
+
+      .page-title::before {
+        content: '';
+        width: 4px;
+        height: 1.75rem;
+        background: linear-gradient(180deg, var(--accent), #8b5cf6);
+        border-radius: 2px;
+      }
+
 			.eyebrow {
 				color: var(--accent);
 				font-size: 0.8rem;
@@ -203,7 +223,7 @@ const formatDate = (date: Date) => {
 		<main>
 			<header class="page-header">
 				<p class="eyebrow">Writing Archive</p>
-				<h1>Blog</h1>
+				<h1 class="page-title">Blog</h1>
 				<p>
 					Notes and essays about software engineering, systems, Elixir, NixOS, and the
 					projects I am building.
