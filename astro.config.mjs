@@ -1,6 +1,7 @@
 // @ts-check
 
 import mdx from '@astrojs/mdx';
+import { unified } from '@astrojs/markdown-remark';
 import sitemap from '@astrojs/sitemap';
 import expressiveCode from 'astro-expressive-code';
 import { defineConfig, fontProviders } from 'astro/config';
@@ -43,7 +44,9 @@ export default defineConfig({
 		sitemap(),
 	],
 	markdown: {
-		rehypePlugins: [rehypeWrapTables],
+		processor: unified({
+			rehypePlugins: [rehypeWrapTables],
+		}),
 		syntaxHighlight: false,
 	},	
   fonts: [
